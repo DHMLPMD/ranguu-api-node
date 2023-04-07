@@ -1,13 +1,19 @@
-import { Admins, Prisma } from "@prisma/client";
+import { Admins } from "@prisma/client";
 
 const admins: Partial<Admins>[] = [
     {
         name: 'Luis Paulo',
-        email: 'luisdegini.younner@gmail.com',
-        phone_number: "17988037000",
-        password: '123123',
-        cpf: '42140916808',
-        is_phone_validated: true
+        email: 'luispaulo.degini@gmail.com',
+        phone: "17988037000",
+        password_hash: '123123',
+        document: '42140916808',
+    },
+    {
+        name: 'Diego Moraes',
+        email: 'dh.moraes0407@gmail.com',
+        phone: "17997311578",
+        password_hash: '123123',
+        document: '91390060004',
     }
 ]
 

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,110 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Admins {
+  id            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
+  name          String   @db.VarChar(255)
+  document      String   @db.VarChar(255)
+  phone         String   @db.VarChar(255)
+  email         String   @db.VarChar(255)
+  password_hash String   @db.VarChar(255)
+  created_at    DateTime @db.Timestamptz(6)
+  updated_at    DateTime @db.Timestamptz(6)
+
+  @@map("admins")
+}
+
+model States {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
+  name       String   @db.VarChar(255)
+  short_name String   @db.VarChar(255)
+  created_at DateTime @db.Timestamptz(6)
+  updated_at DateTime @db.Timestamptz(6)
+  Cities     Cities[]
+
+  @@map("states")
+}
+
+model Cities {
+  id                  String                @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
+  name                String?               @db.VarChar(255)
+  ibge_code           String?               @db.VarChar(255)
+  is_enabled          Boolean?              @default(false)
+  state_id            String?               @db.VarChar(50)
+  created_at          DateTime              @db.Timestamptz(6)
+  updated_at          DateTime              @db.Timestamptz(6)
+  State               States?               @relation(fields: [state_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  RestaurantAddresses RestaurantAddresses[]
+
+  @@map("cities")
+}
+
+model RestaurantAddresses {
+  id            String       @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
+  address       String       @db.VarChar(300)
+  number        String?      @db.VarChar(255)
+  neighborhood  String       @db.VarChar(255)
+  complement    String?      @db.VarChar(255)
+  zip_code      String       @db.VarChar(8)
+  restaurant_id String?      @unique(map: "restaurant_addresses_restaurant_id_index") @db.VarChar(50)
+  city_id       String?      @db.VarChar(50)
+  created_at    DateTime     @db.Timestamptz(6)
+  updated_at    DateTime     @db.Timestamptz(6)
+  City          Cities?      @relation(fields: [city_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Restaurant    Restaurants? @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("restaurant_addresses")
+}
+
+model RestaurantOnboardingStatus {
+  id            String       @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
+  step_key      String       @db.VarChar(255)
+  status        Boolean?     @default(false)
+  completed_at  DateTime?    @db.Timestamptz(6)
+  restaurant_id String?      @db.VarChar(50)
+  created_at    DateTime     @db.Timestamptz(6)
+  updated_at    DateTime     @db.Timestamptz(6)
+  Restaurant    Restaurants? @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("restaurant_onboarding_status")
+}
+
+model Restaurants {
+  id                         String                       @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
+  document_number            String                       @unique(map: "restaurants_document_number_index") @db.VarChar(255)
+  commom_name                String                       @db.VarChar(350)
+  social_name                String                       @db.VarChar(350)
+  description                String?                      @db.VarChar(255)
+  email                      String                       @unique(map: "restaurants_email_index") @db.VarChar(300)
+  password_hash              String?                      @db.VarChar(255)
+  phone                      String?                      @db.VarChar(12)
+  is_active                  Boolean?                     @default(true)
+  is_email_verified          Boolean?                     @default(false)
+  is_enabled                 Boolean?                     @default(false)
+  tax_regime                 String                       @db.VarChar(255)
+  responsible_name           String                       @db.VarChar(255)
+  responsible_document       String                       @db.VarChar(255)
+  logo                       String?                      @db.VarChar(650)
+  wallpaper                  String?                      @db.VarChar(650)
+  deleted_at                 DateTime?                    @db.Timestamptz(6)
+  created_at                 DateTime                     @db.Timestamptz(6)
+  updated_at                 DateTime                     @db.Timestamptz(6)
+  RestaurantAddress          RestaurantAddresses?
+  RestaurantOnboardingStatus RestaurantOnboardingStatus[]
+
+  @@map("restaurants")
+}
+
+model Tokens {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
+  entity     String   @db.VarChar(255)
+  entity_id  String   @db.VarChar(255)
+  token      String   @db.VarChar(255)
+  created_at DateTime @db.Timestamptz(6)
+  updated_at DateTime @db.Timestamptz(6)
+
+  @@unique([entity, entity_id, token], map: "tokens_entity_entity_id_token_index")
+  @@map("tokens")
 }

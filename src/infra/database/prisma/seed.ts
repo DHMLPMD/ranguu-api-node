@@ -1,11 +1,10 @@
-import { Admins, Prisma, PrismaClient, TrafficFines } from '@prisma/client'
+import {  Prisma, PrismaClient } from '@prisma/client'
 import statesJson from './states.json'
 import citiesJson from './cities.json'
-import trafficFinesJson from './traffic_fines.json'
 
 import { admins as adminSeeds } from './admin'
-import { appLogger } from '../../../core/utils/logger'
-import { hashPassword } from '../../../core/utils/functions'
+import { hashPassword } from 'core/utils/functions'
+import { appLogger } from 'core/utils/logger'
 
 interface States {
     states: {
@@ -21,13 +20,6 @@ interface Cities {
         ibge_code: string
         state_key: number
     }[]
-}
-
-interface ITrafficFines {
-    AIT: string
-    ARTIGO: string | number
-    DESCRICAO: string
-    "Valor da multa": string
 }
 
 const createStatesAndCities = async (prisma: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>) => {
@@ -81,14 +73,14 @@ const createAdmins = async (prisma: PrismaClient<Prisma.PrismaClientOptions, nev
     await prisma.admins.createMany({
         data: await Promise.all(
             adminSeeds.map(async item => {
-                const hashedPassword = await hashPassword(item.password!)
+                const hashedPassword = await hashPassword(item.password_hash!)
 
                 return {
                     name: item.name!,
                     email: item.email!,
-                    phone_number: item.phone_number!,
-                    cpf: item.cpf!,
-                    password: hashedPassword,
+                    phone: item.phone!,
+                    document: item.document!,
+                    password_hash: hashedPassword,
                     created_at: new Date(),
                     updated_at: new Date()
                 }
@@ -98,38 +90,12 @@ const createAdmins = async (prisma: PrismaClient<Prisma.PrismaClientOptions, nev
 
 }
 
-const createTrafficFines = async (prisma: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>) => {
-    const found = await prisma.trafficFines.findFirst({})
-
-    if(!found){
-        const formatedData = trafficFinesJson.map((item: ITrafficFines) => {
-            const rawValue = item["Valor da multa"]
-            const formatedValue = Number(rawValue.trim().replace(/[R$.,\s]/g, ''))
-
-            return {
-                fine_article: item.ARTIGO.toString(),
-                description: item.DESCRICAO,
-                value: formatedValue
-            }
-        }) as TrafficFines[]
-
-        await prisma.trafficFines.createMany({
-            data: formatedData.map(item => ({
-                ...item,
-                created_at: new Date(),
-                updated_at: new Date(),
-            }))
-        })
-    }
-}
-
 (async () => {
     const prisma = new PrismaClient()
 
     try {
         await createStatesAndCities(prisma)
         await createAdmins(prisma)
-        await createTrafficFines(prisma)
 
         await prisma.$disconnect()
 
