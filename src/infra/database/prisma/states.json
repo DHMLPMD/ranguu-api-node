@@ -1,0 +1,139 @@
+{
+    "states": [
+        {
+            "name" : "Acre",
+            "short_name" : "AC",
+            "key" : 1
+        },
+        {
+            "name" : "Alagoas",
+            "short_name" : "AL",
+            "key" : 2
+        },
+        {
+            "name" : "Amapá",
+            "short_name" : "AP",
+            "key" : 3
+        },
+        {
+            "name" : "Amazonas",
+            "short_name" : "AM",
+            "key" : 4
+        },
+        {
+            "name" : "Bahia",
+            "short_name" : "BA",
+            "key" : 5
+        },
+        {
+            "name" : "Ceará",
+            "short_name" : "CE",
+            "key" : 6
+        },
+        {
+            "name" : "Distrito Federal",
+            "short_name" : "DF",
+            "key" : 7
+        },
+        {
+            "name" : "Espírito Santo",
+            "short_name" : "ES",
+            "key" : 8
+        },
+        {
+            "name" : "Goiás",
+            "short_name" : "GO",
+            "key" : 9
+        },
+        {
+            "name" : "Maranhão",
+            "short_name" : "MA",
+            "key" : 10
+        },
+        {
+            "name" : "Mato Grosso",
+            "short_name" : "MT",
+            "key" : 11
+        },
+        {
+            "name" : "Mato Grosso do Sul",
+            "short_name" : "MS",
+            "key" : 12
+        },
+        {
+            "name" : "Minas Gerais",
+            "short_name" : "MG",
+            "key" : 13
+        },
+        {
+            "name" : "Pará",
+            "short_name" : "PA",
+            "key" : 14
+        },
+        {
+            "name" : "Paraíba",
+            "short_name" : "PB",
+            "key" : 15
+        },
+        {
+            "name" : "Paraná",
+            "short_name" : "PR",
+            "key" : 16
+        },
+        {
+            "name" : "Pernambuco",
+            "short_name" : "PE",
+            "key" : 17
+        },
+        {
+            "name" : "Piauí",
+            "short_name" : "PI",
+            "key" : 18
+        },
+        {
+            "name" : "Rio de Janeiro",
+            "short_name" : "RJ",
+            "key" : 19
+        },
+        {
+            "name" : "Rio Grande do Norte",
+            "short_name" : "RN",
+            "key" : 20
+        },
+        {
+            "name" : "Rio Grande do Sul",
+            "short_name" : "RS",
+            "key" : 21
+        },
+        {
+            "name" : "Rondônia",
+            "short_name" : "RO",
+            "key" : 22
+        },
+        {
+            "name" : "Roraima",
+            "short_name" : "RR",
+            "key" : 23
+        },
+        {
+            "name" : "Santa Catarina",
+            "short_name" : "SC",
+            "key" : 24
+        },
+        {
+            "name" : "São Paulo",
+            "short_name" : "SP",
+            "key" : 25
+        },
+        {
+            "name" : "Sergipe",
+            "short_name" : "SE",
+            "key" : 26
+        },
+        {
+            "name" : "Tocantins",
+            "short_name" : "TO",
+            "key" : 27
+        }
+    ]}
+    
