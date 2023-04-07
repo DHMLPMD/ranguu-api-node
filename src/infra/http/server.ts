@@ -7,9 +7,9 @@ import morgan from 'morgan'
 import { errors } from 'celebrate'
 import cors from 'cors'
 import helmet from 'helmet'
-// import { apiRoutes } from './routes/api'
 import { handleNotFound } from './middlewares/notFound'
 import globalErrorsHandling from './middlewares/globalErrors'
+import { apiRoutes } from './routes'
 // import '../database/redis'
 
 const server = express()
@@ -30,7 +30,7 @@ switch(process.env.NODE_ENV!){
     default: break
 }
 
-// server.use('/api', apiRoutes)
+server.use('/api', apiRoutes)
 server.use(errors())
 server.use(handleNotFound)
 server.use(globalErrorsHandling)
