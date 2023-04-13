@@ -2,6 +2,7 @@ import { PrismaRestaurantOnboardingStatusRepository } from "modules/restaurant_o
 import { PrismaRestaurantsRepository } from "../infra/database/repository/prisma"
 import { RestaurantOnboardingController } from "../infra/http/controllers/onboarding"
 import { CreateBasicData } from "../services/_onboarding/CreateBasicData"
+import { GetBasicData } from "../services/_onboarding/GetBasicData"
 
 export const createRestaurantOnboardingController = () => {
     const restaurantRepo = new PrismaRestaurantsRepository()
@@ -12,8 +13,14 @@ export const createRestaurantOnboardingController = () => {
         restaurantOnboardingRepo
     )
 
+    const getBasicData = new GetBasicData(
+        restaurantRepo,
+        restaurantOnboardingRepo
+    )
+
     const controller = new RestaurantOnboardingController(
-        createBasicData
+        createBasicData,
+        getBasicData
     )
     return controller
 }

@@ -29,4 +29,17 @@ restaurantOnboardingRoutes.post(
     (req, res) => controller.createBasicData(req, res)
 )
 
+restaurantOnboardingRoutes.get(
+    '/basic_data/:restaurant_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            restaurant_id: Joi.string().uuid().required(),
+        })
+    }, {
+        abortEarly: false,
+        messages
+    }),
+    (req, res) => controller.getBasicData(req, res)
+)
+
 export { restaurantOnboardingRoutes }
