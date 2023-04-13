@@ -42,4 +42,23 @@ restaurantOnboardingRoutes.get(
     (req, res) => controller.getBasicData(req, res)
 )
 
+restaurantOnboardingRoutes.post(
+    '/address',
+    celebrate({
+        [Segments.BODY]: Joi.object({
+            address: Joi.string().max(300).required(),
+            number: Joi.string().max(100).required(),
+            complement: Joi.string().max(150).allow('').default(''),
+            neighborhood: Joi.string().max(150).required(),
+            zip_code: Joi.string().length(8).regex(/^[0-9]*$/).required(),
+            city_id: Joi.string().uuid().required(),
+            restaurant_id: Joi.string().uuid().required(),
+        })
+    }, {
+        abortEarly: false,
+        messages,
+    }),
+    (req, res) => controller.createAddress(req, res)
+)
+
 export { restaurantOnboardingRoutes }
