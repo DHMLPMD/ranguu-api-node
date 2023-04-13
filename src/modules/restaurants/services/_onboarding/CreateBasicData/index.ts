@@ -1,8 +1,11 @@
 import AppError from "core/classes/errorHandler";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+
 import { IParamsCreateRestaurantBasicData } from "./interfaces";
 import { IRestaurantRepository } from "modules/restaurants/infra/database/repository/interface";
 import { IRestaurantOnboardingRepository } from "modules/restaurant_onboardings/infra/database/repository/interface";
 import { RestaurantOnboardingStep, eRestaurantOnboardingSteps, validRestaurantOnboardingSteps } from "modules/restaurant_onboardings/utils";
+import { PrismaErrorHandler } from "core/classes/prismaErrorHandler";
 
 export class CreateBasicData {
     constructor(
@@ -73,6 +76,10 @@ export class CreateBasicData {
                 restaurant_id: id
             }
         } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError)
+                throw new PrismaErrorHandler(error)
+            if (error.code && error.code == 'P2002')    //Prisma error for unique constraint violation
+                throw new PrismaErrorHandler(error)
             throw new AppError(error.message)
         }
     }
