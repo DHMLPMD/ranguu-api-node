@@ -87,4 +87,19 @@ restaurantOnboardingRoutes.get(
     (req, res) => controller.getAddress(req, res)
 )
 
+restaurantOnboardingRoutes.post(
+    '/sign_password',
+    celebrate({
+        [Segments.BODY]: Joi.object({
+            restaurant_id: Joi.string().uuid().required(),
+            password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/).required(),
+            repeat_password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/).required().equal(Joi.ref('/password')),
+        })
+    }, {
+        abortEarly: false,
+        messages
+    }),
+    (req, res) => controller.assignPassword(req, res)
+)
+
 export { restaurantOnboardingRoutes }

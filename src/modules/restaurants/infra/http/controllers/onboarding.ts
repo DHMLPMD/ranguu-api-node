@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { AssignPassword } from 'modules/restaurants/services/_onboarding/AssignPassword'
 
 import { CreateAddressData } from 'modules/restaurants/services/_onboarding/CreateAddressData'
 import { CreateBasicData } from 'modules/restaurants/services/_onboarding/CreateBasicData'
@@ -12,7 +13,8 @@ export class RestaurantOnboardingController {
         private getBasicDataService: GetBasicData,
         private createAddressService: CreateAddressData,
         private getAddressService: GetAddressData,
-        private getLastStepService: GetLastStep
+        private getLastStepService: GetLastStep,
+        private assignPasswordService: AssignPassword
     ) { }
 
     async createBasicData(request: Request, response: Response): Promise<Response> {
@@ -45,6 +47,14 @@ export class RestaurantOnboardingController {
 
     async getLastStep(request: Request, response: Response): Promise<Response> {
         const result = await this.getLastStepService.execute(request.params.restaurant_id)
+
+        return response.json(result)
+    }
+
+    async assignPassword(request: Request, response: Response): Promise<Response> {
+        const result = await this.assignPasswordService.execute(
+            request.body
+        )
 
         return response.json(result)
     }

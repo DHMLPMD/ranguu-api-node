@@ -10,7 +10,7 @@ import helmet from 'helmet'
 import { handleNotFound } from './middlewares/notFound'
 import globalErrorsHandling from './middlewares/globalErrors'
 import { apiRoutes } from './routes'
-// import '../database/redis'
+import '../database/redis'
 
 const server = express()
 
