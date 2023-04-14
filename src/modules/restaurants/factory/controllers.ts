@@ -6,6 +6,8 @@ import { GetBasicData } from "../services/_onboarding/GetBasicData"
 import { PrismaCityRepository } from "modules/cities/infra/database/repository/prisma"
 import { PrismaRestaurantAddressRepository } from "modules/restaurant_address/infra/database/repository/prisma"
 import { CreateAddressData } from "../services/_onboarding/CreateAddressData"
+import { GetAddressData } from "../services/_onboarding/GetAddressData"
+import { GetLastStep } from "../services/_onboarding/GetLastStep"
 
 export const createRestaurantOnboardingController = () => {
     const restaurantRepo = new PrismaRestaurantsRepository()
@@ -29,10 +31,21 @@ export const createRestaurantOnboardingController = () => {
         cityRepo,
     )
 
+    const getAddressData = new GetAddressData(
+        restaurantOnboardingRepo,
+        restaurantAddressRepo,
+    )
+
+    const getLastStep = new GetLastStep(
+        restaurantOnboardingRepo
+    )
+
     const controller = new RestaurantOnboardingController(
         createBasicData,
         getBasicData,
-        createAddressData
+        createAddressData,
+        getAddressData,
+        getLastStep
     )
     return controller
 }

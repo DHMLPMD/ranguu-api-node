@@ -9,6 +9,19 @@ import { createRestaurantOnboardingController } from 'modules/restaurants/factor
 const restaurantOnboardingRoutes = Router()
 const controller = createRestaurantOnboardingController()
 
+restaurantOnboardingRoutes.get(
+    '/last_step/:restaurant_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            restaurant_id: Joi.string().uuid().required(),
+        })
+    }, {
+        abortEarly: false,
+        messages
+    }),
+    (req, res) => controller.getLastStep(req, res)
+)
+
 restaurantOnboardingRoutes.post(
     "/basic_data",
     celebrate({
@@ -59,6 +72,19 @@ restaurantOnboardingRoutes.post(
         messages,
     }),
     (req, res) => controller.createAddress(req, res)
+)
+
+restaurantOnboardingRoutes.get(
+    '/address/:restaurant_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            restaurant_id: Joi.string().uuid().required(),
+        })
+    }, {
+        abortEarly: false,
+        messages,
+    }),
+    (req, res) => controller.getAddress(req, res)
 )
 
 export { restaurantOnboardingRoutes }
