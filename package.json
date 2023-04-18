@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev:api": "tsx watch --inspect ./src/infra/http/app.ts",
-    "start": "node --optimize_for_size --max_old_space_limit=460 ./dist/infra/http/app.js",
+    "start": "node --optimize_for_size --max_old_space_size=460 ./dist/infra/http/app.js",
     "build": "tsup src",
     "release": "npx prisma migrate deploy && npx prisma db seed",
     "migrate": "npx prisma migrate dev"
