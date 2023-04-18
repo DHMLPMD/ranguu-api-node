@@ -24,8 +24,10 @@ switch(process.env.NODE_ENV!){
         server.use(morgan('dev'))
         break
     case 'staging':
+        server.use(morgan('common'))
         break
     case 'production':
+        server.use(morgan('common'))
         break
     default: break
 }
