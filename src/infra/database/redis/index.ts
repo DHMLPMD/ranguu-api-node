@@ -13,7 +13,7 @@ export let redisClient: RedisClientType | null
         }
     }
 
-    if (process.env.NODE_ENV! !== "dev")
+    if (process.env.REDIS_TLS! == 'true')
         connectionOptions.socket = {
             ...connectionOptions.socket,
             tls: true,
