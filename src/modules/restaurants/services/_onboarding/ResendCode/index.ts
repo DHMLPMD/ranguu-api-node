@@ -16,6 +16,8 @@ export class ResendCode {
     async execute(restaurantId: string) {
         try {
             const steps = await this.onboardingRepo.findByRestaurantId(restaurantId)
+            if (steps.length == 0)
+                throw new Error('Operação não permitida')
 
             const completedStep = steps.find(item => item.step_key === eRestaurantOnboardingSteps.COMPLETED)
 

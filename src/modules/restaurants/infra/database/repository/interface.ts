@@ -5,4 +5,5 @@ export interface IRestaurantRepository {
     createOne(params: Prisma.RestaurantsCreateArgs): Promise<Restaurants>
     updateOne(params: Prisma.RestaurantsUpdateArgs): Promise<boolean>
     initiateOnboarding(restaurantCreateParams: Prisma.RestaurantsCreateArgs, onboardingSteps: Partial<RestaurantOnboardingStatus>[]): Promise<Restaurants>
+    finalizeOnboarding(restaurant_id: string): Promise<boolean>
 }

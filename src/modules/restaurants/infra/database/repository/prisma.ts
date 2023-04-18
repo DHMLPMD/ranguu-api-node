@@ -1,8 +1,44 @@
 import { Prisma, RestaurantOnboardingStatus, Restaurants } from "@prisma/client";
 import { IRestaurantRepository } from "./interface";
 import { PrismaConnection } from "core/classes/prismaClient";
+import { eRestaurantOnboardingSteps } from "modules/restaurant_onboardings/utils";
 
 export class PrismaRestaurantsRepository implements IRestaurantRepository {
+
+    async finalizeOnboarding(restaurant_id: string): Promise<boolean> {
+        const prisma = PrismaConnection.getClient()
+
+        await prisma.$transaction(async transaction => {
+            const { count } = await transaction.restaurantOnboardingStatus.updateMany({
+                where: {
+                    restaurant_id: restaurant_id,
+                    step_key: eRestaurantOnboardingSteps.COMPLETED
+                },
+                data: {
+                    completed_at: new Date(),
+                    status: true,
+                    updated_at: new Date()
+                }
+            })
+
+            if (count == 0)
+                throw new Error('Error on update the restaurant onboarding steps')
+
+            await transaction.restaurants.update({
+                where: {
+                    id: restaurant_id,
+                },
+                data: {
+                    is_active: true,
+                    is_email_verified: true,
+                    updated_at: new Date(),
+                }
+            })
+        })
+
+        return true
+    }
+
     async initiateOnboarding(restaurantCreateParams: Prisma.RestaurantsCreateArgs, onboardingSteps: Partial<RestaurantOnboardingStatus>[]): Promise<Restaurants> {
         const prisma = PrismaConnection.getClient()
         let created: Restaurants = {} as any
@@ -27,7 +63,7 @@ export class PrismaRestaurantsRepository implements IRestaurantRepository {
                 }) as any)
             })
         })
-        
+
         return created
     }
 

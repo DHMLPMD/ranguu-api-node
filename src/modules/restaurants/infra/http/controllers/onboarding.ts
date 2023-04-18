@@ -7,6 +7,7 @@ import { GetAddressData } from 'modules/restaurants/services/_onboarding/GetAddr
 import { GetBasicData } from 'modules/restaurants/services/_onboarding/GetBasicData'
 import { GetLastStep } from 'modules/restaurants/services/_onboarding/GetLastStep'
 import { ResendCode } from 'modules/restaurants/services/_onboarding/ResendCode'
+import { ValidateAccount } from 'modules/restaurants/services/_onboarding/ValidateAccount'
 
 export class RestaurantOnboardingController {
     constructor(
@@ -16,7 +17,8 @@ export class RestaurantOnboardingController {
         private getAddressService: GetAddressData,
         private getLastStepService: GetLastStep,
         private assignPasswordService: AssignPassword,
-        private resendCodeService: ResendCode
+        private resendCodeService: ResendCode,
+        private validateAccountService: ValidateAccount
     ) { }
 
     async createBasicData(request: Request, response: Response): Promise<Response> {
@@ -67,5 +69,13 @@ export class RestaurantOnboardingController {
         )
 
         return response.json(result)
+    }
+
+    async validateAccount(request: Request, response: Response): Promise<Response> {
+        await this.validateAccountService.execute(
+            request.body
+        )
+
+        return response.status(202).send()
     }
 }

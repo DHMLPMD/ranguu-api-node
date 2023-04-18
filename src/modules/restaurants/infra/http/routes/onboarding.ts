@@ -114,4 +114,18 @@ restaurantOnboardingRoutes.put(
     (req, res) => controller.resendCode(req, res)
 )
 
+restaurantOnboardingRoutes.post(
+    '/validate_account',
+    celebrate({
+        [Segments.BODY]: Joi.object({
+            restaurant_id: Joi.string().uuid().required(),
+            code: Joi.string().regex(/^[0-9]*$/).required(),
+        })
+    }, {
+        abortEarly: false,
+        messages
+    }),
+    (req, res) => controller.validateAccount(req, res)
+)
+
 export { restaurantOnboardingRoutes }
