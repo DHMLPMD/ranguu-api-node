@@ -26,7 +26,7 @@ model States {
   short_name String   @db.VarChar(255)
   created_at DateTime @db.Timestamptz(6)
   updated_at DateTime @db.Timestamptz(6)
-  Cities     Cities[]
+  cities     Cities[] 
 
   @@map("states")
 }
@@ -39,8 +39,8 @@ model Cities {
   state_id            String?               @db.VarChar(50)
   created_at          DateTime              @db.Timestamptz(6)
   updated_at          DateTime              @db.Timestamptz(6)
-  State               States?               @relation(fields: [state_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  RestaurantAddresses RestaurantAddresses[]
+  state               States?               @relation(fields: [state_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  restaurant_addresses RestaurantAddresses[]
 
   @@map("cities")
 }
@@ -56,8 +56,8 @@ model RestaurantAddresses {
   city_id       String?      @db.VarChar(50)
   created_at    DateTime     @db.Timestamptz(6)
   updated_at    DateTime     @db.Timestamptz(6)
-  City          Cities?      @relation(fields: [city_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Restaurant    Restaurants? @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  city          Cities?      @relation(fields: [city_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  restaurant    Restaurants? @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("restaurant_addresses")
 }
@@ -70,7 +70,7 @@ model RestaurantOnboardingStatus {
   restaurant_id String?      @db.VarChar(50)
   created_at    DateTime     @db.Timestamptz(6)
   updated_at    DateTime     @db.Timestamptz(6)
-  Restaurant    Restaurants? @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  restaurant    Restaurants? @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("restaurant_onboarding_status")
 }
@@ -95,8 +95,8 @@ model Restaurants {
   deleted_at                 DateTime?                    @db.Timestamptz(6)
   created_at                 DateTime                     @db.Timestamptz(6)
   updated_at                 DateTime                     @db.Timestamptz(6)
-  RestaurantAddress          RestaurantAddresses?
-  RestaurantOnboardingStatus RestaurantOnboardingStatus[]
+  restaurant_address          RestaurantAddresses?
+  restaurant_onboarding_status RestaurantOnboardingStatus[]
 
   @@map("restaurants")
 }
