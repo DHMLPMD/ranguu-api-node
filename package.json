@@ -6,7 +6,7 @@
   "description": "API de regra de negócio da aplicação Ranguu",
   "engines": {
     "node": "^18.13",
-    "yarn": "~1.22.10"
+    "yarn": "~1.22.5"
   },
   "prisma": {
     "seed": "tsx ./src/infra/database/prisma/seed.ts"
