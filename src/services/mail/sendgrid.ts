@@ -20,7 +20,6 @@ export class SendgridService implements IMailService {
                 text: content
             })
             
-            console.log(result)
             return result.statusCode
         } catch (error) {
             throw error

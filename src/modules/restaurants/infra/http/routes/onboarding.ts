@@ -102,4 +102,16 @@ restaurantOnboardingRoutes.post(
     (req, res) => controller.assignPassword(req, res)
 )
 
+restaurantOnboardingRoutes.put(
+    '/resend_code/:restaurant_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            restaurant_id: Joi.string().uuid().required(),
+        })
+    }, {
+        messages
+    }),
+    (req, res) => controller.resendCode(req, res)
+)
+
 export { restaurantOnboardingRoutes }

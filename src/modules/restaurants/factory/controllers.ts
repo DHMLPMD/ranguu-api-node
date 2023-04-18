@@ -10,6 +10,7 @@ import { GetAddressData } from "../services/_onboarding/GetAddressData"
 import { GetLastStep } from "../services/_onboarding/GetLastStep"
 import { AssignPassword } from "../services/_onboarding/AssignPassword"
 import { SendgridService } from "services/mail/sendgrid"
+import { ResendCode } from "../services/_onboarding/ResendCode"
 
 export const createRestaurantOnboardingController = () => {
     const restaurantRepo = new PrismaRestaurantsRepository()
@@ -50,13 +51,20 @@ export const createRestaurantOnboardingController = () => {
         mailService
     )
 
+    const resendCode = new ResendCode(
+        restaurantRepo,
+        restaurantOnboardingRepo,
+        mailService
+    )
+
     const controller = new RestaurantOnboardingController(
         createBasicData,
         getBasicData,
         createAddressData,
         getAddressData,
         getLastStep,
-        assignPassword
+        assignPassword,
+        resendCode
     )
     return controller
 }

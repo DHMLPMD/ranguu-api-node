@@ -27,7 +27,7 @@ export class AssignPassword {
             const basicDataStep = steps.find(item => item.step_key == eRestaurantOnboardingSteps.BASIC_DATA)
             const addressStep = steps.find(item => item.step_key == eRestaurantOnboardingSteps.ADDRESS_DATA)
 
-            if(basicDataStep?.completed_at === null || addressStep?.completed_at === null)
+            if (basicDataStep?.completed_at === null || addressStep?.completed_at === null)
                 throw new Error('Operação não permitada, onboarding não concluído')
 
             const hashedPassword = await hashPassword(password)
@@ -48,27 +48,31 @@ export class AssignPassword {
 
             const randomCode = genRandomCode(6)
 
+            const startTime = new Date().getTime()
             await redisClient?.set(
                 `restaurant_onboarding_id${restaurant_id}`,
                 randomCode,
                 {
-                    EX: 90
+                    EX: 95
                 }
             )
 
-            const result =  await this.mailService.sendTextMail(
+            const result = await this.mailService.sendTextMail(
                 restaurant.email,
                 'Confirmação de Conta',
                 `Olá, este é um email de confirmação de conta.\nPor favor insira o código abaixo no campo de validação no seu fluxo.\n\nCódigo: ${randomCode}`
             )
 
-            if(result !== 202)
+            if (result !== 202)
                 throw new Error('Ocorreu um erro ao enviar o email com o código de confirmação')
-            
+
+            const endTime = new Date().getTime()
+            const remainingTime = Math.round(95 - (endTime - startTime) / 1000)
+
             return {
                 sent_to: restaurant.email,
                 code: {
-                    code_ttl_seconds: 90,
+                    code_ttl_seconds: remainingTime,
                     length: randomCode.length
                 }
             }
