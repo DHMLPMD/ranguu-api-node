@@ -5,3 +5,5 @@ export interface IResultList<T> {
     total: number,
     total_pages: number
 }
+
+export type UserRoleTypes = 'restaurants'
