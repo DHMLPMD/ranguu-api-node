@@ -3,6 +3,7 @@ import { AuthController } from "../infra/http/controller"
 import { Authenticator } from "../services/Authenticator"
 import { PrismaTokensRepository } from "modules/tokens/infra/database/repository/prisma"
 import { AuthenticateRestaurants } from "../services/AuthenticateRestaurants"
+import { RefreshToken } from "../services/RefreshToken"
 
 export const createAuthController = () => {
     const restaurantRepo = new PrismaRestaurantsRepository()
@@ -13,9 +14,15 @@ export const createAuthController = () => {
         restaurantRepo,
         authenticatorService
     )
+
+    const refreshTokenService = new RefreshToken(
+        tokenRepo,
+        restaurantRepo
+    )
     
     const controller = new AuthController(
-        authRestaurants
+        authRestaurants,
+        refreshTokenService
     )
     return controller
 }

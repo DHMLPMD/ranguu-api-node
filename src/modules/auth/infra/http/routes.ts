@@ -20,4 +20,17 @@ authRoutes.post(
     (req, res) => controller.authRestaurants(req, res)
 )
 
+authRoutes.put(
+    '/refresh_token',
+    celebrate({
+        [Segments.BODY]: Joi.object({
+            refresh_token: Joi.string().uuid().required(),
+        })
+    }, {
+        abortEarly: false,
+        messages
+    }),
+    (req, res) => controller.refreshToken(req, res)
+)
+
 export { authRoutes }
