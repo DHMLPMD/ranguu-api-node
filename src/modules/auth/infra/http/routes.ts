@@ -1,5 +1,6 @@
 import { Joi, Segments, celebrate } from 'celebrate'
 import { Router } from 'express'
+import { ensureAuth } from 'infra/http/middlewares/ensureAuth'
 import { messages } from 'joi-translation-pt-br'
 import { createAuthController } from 'modules/auth/factory/create_controller'
 
@@ -31,6 +32,12 @@ authRoutes.put(
         messages
     }),
     (req, res) => controller.refreshToken(req, res)
+)
+
+authRoutes.put(
+    '/firebase',
+    ensureAuth,
+    (req, res) => controller.firebaseAuth(req, res)
 )
 
 export { authRoutes }

@@ -4,6 +4,7 @@ import { Authenticator } from "../services/Authenticator"
 import { PrismaTokensRepository } from "modules/tokens/infra/database/repository/prisma"
 import { AuthenticateRestaurants } from "../services/AuthenticateRestaurants"
 import { RefreshToken } from "../services/RefreshToken"
+import { FirebaseAuth } from "../services/Firebase"
 
 export const createAuthController = () => {
     const restaurantRepo = new PrismaRestaurantsRepository()
@@ -19,10 +20,13 @@ export const createAuthController = () => {
         tokenRepo,
         restaurantRepo
     )
+
+    const firebaseAuth = new FirebaseAuth()
     
     const controller = new AuthController(
         authRestaurants,
-        refreshTokenService
+        refreshTokenService,
+        firebaseAuth
     )
     return controller
 }
