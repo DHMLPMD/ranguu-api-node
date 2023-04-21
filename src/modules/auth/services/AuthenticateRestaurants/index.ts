@@ -16,11 +16,16 @@ export class AuthenticateRestaurants {
                     email: params.email,
                     is_active: true,
                     is_email_verified: true,
-                }
+                },
+                undefined,
+                false
             )
 
+            if(!restaurant)
+                throw new AppError('Email ou senha inválidos', 401)
+
             const result = await this.authService.execute(
-                restaurant,
+                restaurant!,
                 params.password,
                 'restaurants'
             )
