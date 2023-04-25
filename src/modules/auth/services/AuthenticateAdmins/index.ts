@@ -1,38 +1,37 @@
 import AppError from "core/classes/errorHandler";
+import { IAdminRepository } from "modules/admins/infra/database/repository/interfaces";
 import { IParamsAuth } from "modules/auth/utils/interfaces";
-import { IRestaurantRepository } from "modules/restaurants/infra/database/repository/interface";
 import { IAuthenticatorService } from "../Authenticator/interfaces";
 
-export class AuthenticateRestaurants {
+export class AuthenticateAdmins {
     constructor(
-        private repo: IRestaurantRepository,
+        private repo: IAdminRepository,
         private authService: IAuthenticatorService
-    ){}
+    ) { }
 
-    async execute(params: IParamsAuth){
+    async execute(params: IParamsAuth) {
         try {
-            const restaurant = await this.repo.findOneByArgs(
+            const admins = await this.repo.findOneByArgs(
                 {
-                    email: params.email,
-                    is_active: true,
-                    is_email_verified: true,
+                    where: {
+                        email: params.email
+                    }
                 },
-                undefined,
                 false
             )
-
-            if(!restaurant)
+                
+            if(!admins)
                 throw new AppError('Email ou senha inválidos', 401)
 
             const result = await this.authService.execute(
-                restaurant!,
+                admins,
                 params.password,
-                'restaurant'
+                'admin'
             )
 
             return result
-        } catch(error){ 
-            if(error instanceof AppError)
+        } catch (error) {
+            if (error instanceof AppError)
                 throw error
 
             throw new AppError(error.message)

@@ -1,4 +1,4 @@
-import { Restaurants } from "@prisma/client"
+import { Admins, Restaurants } from "@prisma/client"
 import { UserRoleTypes } from "core/interfaces"
 
 export interface IResultAuthenticator {
@@ -7,5 +7,5 @@ export interface IResultAuthenticator {
 }
 
 export interface IAuthenticatorService {
-    execute(user: Restaurants, password: string, role: UserRoleTypes): Promise<IResultAuthenticator>
+    execute(user: Restaurants | Admins, password: string, role: UserRoleTypes): Promise<IResultAuthenticator>
 }

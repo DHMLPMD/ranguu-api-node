@@ -21,6 +21,20 @@ authRoutes.post(
     (req, res) => controller.authRestaurants(req, res)
 )
 
+authRoutes.post(
+    '/admin',
+    celebrate({
+        [Segments.BODY]: Joi.object({
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+        })
+    }, {
+        abortEarly: false,
+        messages
+    }),
+    (req, res) => controller.authAdmins(req, res)
+)
+
 authRoutes.put(
     '/refresh_token',
     celebrate({

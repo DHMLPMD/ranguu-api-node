@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import { Joi, Segments, celebrate } from 'celebrate'
-import { eRoleAccessType } from 'core/enums'
 import { messages } from 'joi-translation-pt-br'
 
 import { grantIs } from 'infra/http/middlewares/ensureRoles'
 import { verifyPathFiles } from 'core/utils/formatters/string'
 import { createCategoryController } from 'modules/categories/factory/create_controller'
+import { eRoleAccessType } from 'core/interfaces'
 
 const categoryRoutes = Router()
 const controller = createCategoryController()

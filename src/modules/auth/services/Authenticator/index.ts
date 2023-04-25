@@ -1,4 +1,4 @@
-import { Restaurants } from "@prisma/client";
+import { Admins, Restaurants } from "@prisma/client";
 import { sign } from "jsonwebtoken";
 import { compare as passwordCompare } from 'bcryptjs'
 import { randomUUID } from 'node:crypto'
@@ -13,7 +13,7 @@ export class Authenticator implements IAuthenticatorService {
         private tokenRepo: ITokenRepository
     ) { }
 
-    async execute(user: Restaurants, password: string, role: UserRoleTypes): Promise<IResultAuthenticator> {
+    async execute(user: Restaurants | Admins, password: string, role: UserRoleTypes): Promise<IResultAuthenticator> {
         const matchedResult = await passwordCompare(password, user.password_hash!)
 
         if (!matchedResult)

@@ -6,4 +6,10 @@ export interface IResultList<T> {
     total_pages: number
 }
 
-export type UserRoleTypes = 'restaurants'
+export enum eRoleAccessType {
+    ADMIN = 'admin',
+    RESTAURANT = 'restaurant',
+    CUSTOMER = 'customer'
+}
+
+export type UserRoleTypes = 'restaurant' | 'admin'
