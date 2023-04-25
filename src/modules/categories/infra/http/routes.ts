@@ -25,4 +25,13 @@ categoryRoutes.post(
     (req, res) => controller.create(req, res)
 )
 
+categoryRoutes.get(
+    '/simple_list',
+    grantIs([
+        eRoleAccessType.ADMIN,
+        eRoleAccessType.RESTAURANT
+    ]),
+    (req, res) => controller.simpleList(req, res)
+)
+
 export { categoryRoutes }
