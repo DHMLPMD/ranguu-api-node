@@ -1,58 +1,67 @@
-// import { Request, Response, NextFunction } from "express"
+import { Request, Response, NextFunction } from "express"
 
-// import AppError from "../../../core/classes/errorHandler"
-// import { eRoleAccessType } from "../../../core/enums"
-// import { PrismaAdminsRepository } from "../../../modules/admins/infra/database/repository/prisma"
-// import { PrismaTrafficAgentRepository } from "../../../modules/traffic_agents/infra/database/repository/prisma"
+import { eRoleAccessType } from "core/enums"
+import AppError from "core/classes/errorHandler"
+import { PrismaAdminsRepository } from "modules/admins/infra/database/repository/prisma"
+import { PrismaRestaurantsRepository } from "modules/restaurants/infra/database/repository/prisma"
 
 
-// const verifyAdmin = async (id: string) => {
-//     const adminRepo = new PrismaAdminsRepository()
 
-//     const found = await adminRepo.findOneByArgs({
-//         id,
-//         is_active: true
-//     })
+const verifyAdmin = async (id: string) => {
+    const adminRepo = new PrismaAdminsRepository()
 
-//     if (!found)
-//         throw new AppError('Does not have permission', 401)
-// }
+    const found = await adminRepo.findOneByArgs(
+        {
+            where: {
+                id,
+            }
+        },
+        false
+    )
 
-// const verifyTrafficAgent = async (id: string) => {
-//     const trafficAgentRepo = new PrismaTrafficAgentRepository()
+    if (!found)
+        throw new AppError('Does not have permission', 401)
+}
 
-//     const found = await trafficAgentRepo.findOneByArgs({
-//         id,
-//         is_active: true
-//     })
+const verifyTrafficAgent = async (id: string) => {
+    const restaurantRepo = new PrismaRestaurantsRepository()
 
-//     if (!found)
-//         throw new AppError('Does not have permission', 401)
-// }
+    const found = await restaurantRepo.findOneByArgs(
+        {
+            id,
+            is_active: true
+        },
+        undefined,
+        false
+    )
 
-// export const grantIs = (roles: string[]) => {
-//     return async (request: Request, response: Response, next: NextFunction) => {
-//         try {
-//             const { id, role } = request.user as { id: string, role: eRoleAccessType }
+    if (!found)
+        throw new AppError('Does not have permission', 401)
+}
 
-//             if (!roles.includes(role))
-//                 throw new AppError('Does not have permission', 401)
+export const grantIs = (roles: string[]) => {
+    return async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const { id, role } = request.user as { id: string, role: eRoleAccessType }
 
-//             switch (role) {
-//                 case 'admin':
-//                     await verifyAdmin(id)
-//                     break
-//                 case 'traffic_agent':
-//                     await verifyTrafficAgent(id)
-//                     break
-//                 default: throw new AppError('Does not have permission', 401)
-//             }
+            if (!roles.includes(role))
+                throw new AppError('Does not have permission', 401)
 
-//             return next()
-//         } catch (error) {
-//             if (error instanceof AppError)
-//                 throw error
-//             throw new AppError(error.message)
-//         }
-//     }
-// }
+            switch (role) {
+                case 'admin':
+                    await verifyAdmin(id)
+                    break
+                case 'restaurant':
+                    await verifyTrafficAgent(id)
+                    break
+                default: throw new AppError('Does not have permission', 401)
+            }
+
+            return next()
+        } catch (error) {
+            if (error instanceof AppError)
+                throw error
+            throw new AppError(error.message)
+        }
+    }
+}
