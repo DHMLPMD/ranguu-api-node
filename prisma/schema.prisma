@@ -115,10 +115,12 @@ model Tokens {
 
 model Categories {
   id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.VarChar(50)
-  description String    @db.VarChar(350)
+  description String    @unique() @db.VarChar(350)
   image       String?   @db.VarChar(650)
   is_active   Boolean   @default(true) @db.Boolean()
   created_at  DateTime  @db.Timestamptz(6)
   updated_at  DateTime  @db.Timestamptz(6)
   deleted_at  DateTime? @db.Timestamptz(6)
+
+  @@map("categories")
 }
